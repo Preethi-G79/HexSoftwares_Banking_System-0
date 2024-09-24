@@ -1,0 +1,127 @@
+public class BankAccount {
+    private String accountNumber;
+    private double balance;
+
+    // Constructor
+    public BankAccount(String accountNumber, double initialBalance) {
+        this.accountNumber = accountNumber;
+        if (initialBalance < 0) {
+            System.out.println("Initial balance cannot be negative. Setting to 0.");
+            this.balance = 0;
+        } else {
+            this.balance = initialBalance;
+        }
+    }
+
+    // Getters
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    // Deposit money
+    public void deposit(double amount) {
+        if (amount > 0) {
+            balance += amount;
+            System.out.println("Deposited: " + amount);
+        } else {
+            System.out.println("Deposit amount must be positive.");
+        }
+    }
+
+    // Withdraw money
+    public void withdraw(double amount) {
+        if (amount > balance) {
+            System.out.println("Insufficient balance. Cannot withdraw " + amount);
+        } else if (amount <= 0) {
+            System.out.println("Withdrawal amount must be positive.");
+        } else {
+            balance -= amount;
+            System.out.println("Withdrawn: " + amount);
+        }
+    }
+
+    // Check balance
+    public void checkBalance() {
+        System.out.println("Current balance: " + balance);
+    }
+}
+
+// Customer.java
+public class Customer {
+    private String name;
+    private BankAccount account;
+
+    // Constructor
+    public Customer(String name, String accountNumber, double initialDeposit) {
+        this.name = name;
+        this.account = new BankAccount(accountNumber, initialDeposit);
+    }
+
+    // Get customer name
+    public String getName() {
+        return name;
+    }
+
+    // Get the customer's account
+    public BankAccount getAccount() {
+        return account;
+    }
+}
+
+// Main.java (to test the implementation)
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        // Creating a customer and bank account
+        System.out.println("Enter customer name:");
+        String name = sc.nextLine();
+        
+        System.out.println("Enter account number:");
+        String accountNumber = sc.nextLine();
+
+        System.out.println("Enter initial deposit amount:");
+        double initialDeposit = sc.nextDouble();
+
+        Customer customer = new Customer(name, accountNumber, initialDeposit);
+
+        // Perform operations
+        while (true) {
+            System.out.println("\nOptions: 1-Deposit 2-Withdraw 3-Check Balance 4-Exit");
+            int choice = sc.nextInt();
+
+            switch (choice) {
+                case 1: // Deposit
+                    System.out.println("Enter amount to deposit:");
+                    double depositAmount = sc.nextDouble();
+                    customer.getAccount().deposit(depositAmount);
+                    break;
+
+                case 2: // Withdraw
+                    System.out.println("Enter amount to withdraw:");
+                    double withdrawAmount = sc.nextDouble();
+                    customer.getAccount().withdraw(withdrawAmount);
+                    break;
+
+                case 3: // Check balance
+                    customer.getAccount().checkBalance();
+                    break;
+
+                case 4: // Exit
+                    System.out.println("Thank you for using our banking system.");
+                    sc.close();
+                    System.exit(0);
+
+                default:
+                    System.out.println("Invalid option. Try again.");
+                    break;
+            }
+        }
+    }
+}
